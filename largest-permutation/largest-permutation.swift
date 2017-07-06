@@ -10,20 +10,27 @@ var k = inputs[0][1]
 
 var array = inputs[1]
 
+var positions = [Int: Int]()
+
+for (index, value) in array.enumerated() {
+    positions[value] = index
+}
+
 for i in 0..<array.count {
-    guard k > 0 else {
+    if k == 0 {
         break
     }
-    let (maxIndex, maxValue) = array.dropFirst(i)
-                                    .enumerated()
-                                    .max(by: { $0.element < $1.element })!
 
-    if maxValue > array[i] {
-        swap(&array[i], &array[maxIndex + i])
-        k -= 1
+    if array[i] == (n - i) {
+        continue
     }
+
+    let maxIndex = positions[n - i]!
+    positions[n - i] = i
+    positions[array[i]] = maxIndex
+
+    swap(&array[i], &array[maxIndex])
+    k -= 1
 }
 
-for element in array {
-    print(element, terminator: " ")
-}
+print(array.map({ String($0) }).joined(separator: " "))
